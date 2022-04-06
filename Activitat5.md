@@ -30,6 +30,7 @@
         i els seus resultats per tal de que al moment d'aixecar la màquina de nou, no es perdi consistència a les dades.
 
 - Com podem mirar el número de pàgines modificades (dirty pages)? I el número total de pàgines?
+               
         Número de dirty pages afegides
             'Added dirty pages uo to         43106086'
 
