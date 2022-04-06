@@ -1,4 +1,4 @@
-# ACTIVITAT Nº1 (1punt)
+# ACTIVITAT Nº1
 
 - Indica quins són els motors d&#39;emmagatzematge que pots utilitzar (quins estan actius)? Mostra al comanda utilitzada i el resultat d&#39;aquesta.
 
@@ -32,119 +32,58 @@
 
            Primer de tot, hem de descarregar el fitxer de la BD de Sakila.
            
-           Un cop el fitxer descarregat, executem la següent comanda per transformar el tipus de taules.
+           Un cop el fitxer descarregat, executem la següent comanda per transformar el tipus de taules
+           'sed -i "s/InnoDB/MyISAM"'.
            
-           Tot seguit, canviaré de path el fitxer i li donaré permisos per que pugui executar l&#39;usuari asix.
+           Tot seguit, canviaré de path el fitxer i li donaré permisos per que pugui executar l'usuari asix.
+           'cp sakila-schema.sql /home/asix/sakila.sql'
+           'chmod 777 /home/asix/sakila.sql'
            
-           Per últim, importem la base de dades transformada.
-            
+           Per últim, importem la base de dades transformada amb la seguent sentència SQL.
+           'SOURCE /home/asix/sakila.sql;' 
+           
            Des de el nostre SGBD podem observar amb la següent sentència quin motor utilitzen les taules del nou esquema afegit.
 
 
 - A partir de MySQL apareixen els schemas de metadades i informació guardats amb InnoDB. Busca informació d&#39;aquests schemas. Indica quin és l&#39;objectiu de cadascun d&#39;ells i posa&#39;n un exemple d&#39;ús.
 
-**Font:** [https://dev.mysql.com/doc/refman/8.0/en/information-schema.html](https://dev.mysql.com/doc/refman/8.0/en/information-schema.html)
+           Font: https://dev.mysql.com/doc/refman/8.0/en/information-schema.html
 
-Aquests schemas de metadades es denominen &#39;INFORMATION\_SCHEMA&#39; i donen accés a les metadades de la BD; informació sobre el servidor, nom de la BD, privilegis...
 
-Podem trobar el següents INFORMATION\_SCHEMA:
+           Aquests schemas de metadades es denominen 'INFORMATION\_SCHEMA' i donen accés a les metadades de la BD; informació sobre el servidor, nom de la BD, privilegis...
 
-- **Table reference:** Dona informació variada de les o la BD.
-- **General Tables:** Dona informació general de les taules no associades a motors d&#39;emmagatzematge, complements o components particulars d&#39;una BD.
-- **InnoDB Tables:** Es pot fer servir per tal de supervisar activitat en curs, per tal de detectar ineficiències o per solucionar problemes de rendiment i capacitat.
-- **Thread Pool Tables:** Proporciona informació sobre el funcionament del grup de sub-processos.
-- **Connection-Control Tables:** Dona informació sobre les connexions de Login.
-- **Firewall Tables:** Proporciona informació sobre dades de memòria del Firewall.
+           Podem trobar el següents INFORMATION\_SCHEMA:
+
+                - Table reference: Dona informació variada de les o la BD.
+                - General Tables: Dona informació general de les taules no associades a motors d'emmagatzematge, complements o components particulars d'una BD.
+                - InnoDB Tables: Es pot fer servir per tal de supervisar activitat en curs, per tal de detectar ineficiències o per solucionar problemes de rendiment i capacitat.
+                - Thread Pool Tables: Proporciona informació sobre el funcionament del grup de sub-processos.
+                - Connection-Control Tables: Dona informació sobre les connexions de Login.
+                - Firewall Tables: Proporciona informació sobre dades de memòria del Firewall.
 
 - Posa un exemple que produeix un DEADLOCK i mostra-ho al professor.
 
-En primer lloc, creem una taula amb una fila i comencem una transacció.
+           En primer lloc, creem una taula amb una fila i comencem una transacció.
+           'CREATE TABLE t (i INT) ENGINE = InnoDB;'
+           'INSERT INTO t(i) VALUES(1);'
+           'START TRASACTION;'
+
+           Després hem de indicar que volem que aquesta transacció sigui bloquejada en mode compartit.
+           'SELECT * FROM t WHERE i = 1 LOCK IN SHARE MODE;'
+
+           Des de un altra sessió, comencem una transacció i esborrem la fila de la taula.
+           'START TRANSACTION;'
+           'DELETE FROM t WHERE i = 1;'
+
+           Intentem esborrar la fila des de la primera sessió.
+           'DELETE FROM t WHERE i = 1;'
+
+           Hem de rebre un missatge com aquets.
+           'ERROR 1213 (40001): Deadlock found when trying to get lock;
+            try restarting trasaction'
 
 
 
-Després hem de indicar que volem que aquesta transacció sigui bloquejada en mode compartit.
-
-
-
-Des de un altra sessió, comencem una transacció i esborrem la fila de la taula.
-
-
-
-Intentem esborrar la fila des de la primera sessió.
-
-
-Rebem.
-
-
-# ACTIVITAT Nº2 – InnoDB part I (2 punts)
-
-**Font:** [MySQL :: MySQL 8.0 Reference Manual :: 15.8.1 InnoDB Startup Configuration](https://dev.mysql.com/doc/refman/8.0/en/innodb-init-startup-configuration.html)
-
-- Desactiva l&#39;opció que ve per defecte de innodb\_file\_per\_table.
-
-Primer canvio el valor de la variable global i comprovo que sigui correcte.
-
-![](RackMultipart20220403-4-ig9m1g_html_254dfb542c9e662c.png)
-
-- Importa la BD Sakila com a taules InnoDB.
-
-Com en el cas anterior, primer canviem el tipus de taules del schema.
-
-![](RackMultipart20220403-4-ig9m1g_html_d3bb4a0d5776fdf5.png)
-
-Tot seguit, executem el fitxer per tal de carregar el schema de la BD.
-
-![](RackMultipart20220403-4-ig9m1g_html_e5c0865b13aab44c.png)
-
-Comprovem el motor que utilitzen les taules.
-
-![](RackMultipart20220403-4-ig9m1g_html_b715f6d7e0cf3495.png) ![](RackMultipart20220403-4-ig9m1g_html_d41fd6c1c22438c6.png)
-
-- Quin/quins són els fitxers de dades? A on es troben i quin és la seva mida?
-
-Es troben **/var/lib/mysql** i tots els fitxers o carpetes que inicien amb &#39; **ib**&#39; pertanyen a InnoDB. L&#39;arxiu principal és ibdata1.
-
-![](RackMultipart20220403-4-ig9m1g_html_e9811ebf5263e231.png)
-
-- Canviar la localització dels fitxers del tablespace de sistema per defecte a /discs-mysql/
-
-Primer de tot creo la carpeta /discs-mysql/ i li dono com a propietari l&#39;usuari mysql.
-
-![](RackMultipart20220403-4-ig9m1g_html_513ad129dfb0c11c.png)
-
-Després, hem de editar el fitxer /etc/my.cnf i afegir la següent línia.
-
-![](RackMultipart20220403-4-ig9m1g_html_23f335e0daa9878c.png)
-
-- Tinguem dos fitxers corresponents al tablespace de sistema.
-
-Modifiquem la línia afegida de la següent manera.
-
-![](RackMultipart20220403-4-ig9m1g_html_88ba84fe58d6dc87.png)
-
-- Tots dos han de tenir la mateixa mida inicial (10MB)
-
-Editem la línia indicant la mida de 10MB en mode autoextend.
-
-![](RackMultipart20220403-4-ig9m1g_html_1b561c57ae6e0c25.png)
-
-- El tablespace ha de créixer de 5MB en 5MB.
-
-Hem de afegir també la següent línia.
-
-![](RackMultipart20220403-4-ig9m1g_html_ef927eac3bfeaba9.png)
-
-- Situa aquests fitxers (de manera relativa a la localització per defecte) en una nova localització simulant el següent:
-
-_/discs-mysql/disk1/primer fitxer de dades → simularà un disc dur_
-
-_/discs-mysql/disk2/segon fitxer de dades → simularà un segon disc dur._
-
-No entenc per que s&#39;ha de fer amb ruta relativa, es a dir, si la ruta per defecte es /var/lib/mysql, quin sentit té que fiqui ../../../discs-mysql/disc1/2 ? Hauria de ser una ruta completa com ja s&#39;indica, l&#39;únic que fas és ficar els dos fitxer en carpetes diferents.
-
-![](RackMultipart20220403-4-ig9m1g_html_e8097f8b7afffc14.png)
-
-#
 
 # ACTIVITAT Nº3 – InnoDB part II (1 punt)
 
