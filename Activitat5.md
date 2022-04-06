@@ -6,6 +6,7 @@
 
         Amb la següent sentència.
           'SHOW ENGINE INNODB STATUS;'
+          
         Hem de buscar el apartat que fica LOG.
 
 - LSN (Log Sequence Number)
