@@ -85,56 +85,6 @@
 
 
 
-# ACTIVITAT Nº3 – InnoDB part II (1 punt)
-
-**Font:** [MySQL :: MySQL 8.0 Reference Manual :: 15.8.1 InnoDB Startup Configuration](https://dev.mysql.com/doc/refman/8.0/en/innodb-init-startup-configuration.html)
-
-- Partint de l&#39;esquema anterior configura el Percona Server perquè cada taula generi el seu propi tablespace en una carpeta anomenada tspaces (aquesta pot estar situada a on vulgueu). Indica quins són els canvis de configuració que has realitzat.
-
-Per realitzar aquest punt, l&#39;únic que cal fer és afegir la següent línia al fitxer my.cnf indicant la ruta de la carpeta on es volen guardar els tablespaces.
-
-![](RackMultipart20220403-4-ig9m1g_html_32dad32ed73b0811.png)
-
-Hem d&#39;assegurar-nos que la carpeta existeix i que l&#39;usuari mysql es el propietari.
-
-![](RackMultipart20220403-4-ig9m1g_html_7e1c0b527da85cd6.png)
-
-Reiniciem el servei mysql.
-
-![](RackMultipart20220403-4-ig9m1g_html_ac2782d64f574a03.png)
-
-# ACTIVITAT Nº4 – InnoDB part III (1 punt)
-
-**Font:** [base de datos - Crear tablespace en Mysql - Stack Overflow en español](https://es.stackoverflow.com/questions/120734/crear-tablespace-en-mysql)
-
-- Crea un tablespace anomenat &#39;ts1&#39; situat a /discs-mysql/disc1/ i col·loca les taules actor, address i category de la BD Sakila.
-
-Primer creem el tablespace indicant la ruta que es demana. Tot seguit afegim les taules indicades al enunciat.
-
-![](RackMultipart20220403-4-ig9m1g_html_bce71f4e20f3e1cb.png)
-
-- Crea un altre tablespace anomenat &#39;ts2&#39; situat a /discs-mysql/disc2/ i col·loca la resta de taules.
-
-Ara ens disposem a crear el segon tablespace.
-
-![](RackMultipart20220403-4-ig9m1g_html_c2b752dcbc19bfa.png)
-
-- Comprova que pots realitzar operacions DML a les taules dels dos tablespaces.
-
-He executat dos select per tal de comprovar si la sentència trobava la taula.
-
-![](RackMultipart20220403-4-ig9m1g_html_4a079c8e81b21b7.png)
-
-Efectivament, les detecta. Son buides ja que aparentment, a l&#39;hora d&#39;importar la BD no s&#39;afegeixen dades a les taules.
-
-![](RackMultipart20220403-4-ig9m1g_html_365808006e15bc09.png)
-
-![](RackMultipart20220403-4-ig9m1g_html_e6d4a1241c11f693.png)
-
-- Quines comandes i configuracions has realitzat per fer els dos apartats anteriors?
-
-Les indicades a les captures.
-
 # ACTIVITAT Nº5 – REDOLOG (2 punts)
 
 **Font:** [The relationship between Innodb Log checkpointing and dirty Buffer pool pages - Percona Database Performance Blog](https://www.percona.com/blog/2012/02/17/the-relationship-between-innodb-log-checkpointing-and-dirty-buffer-pool-pages/)
